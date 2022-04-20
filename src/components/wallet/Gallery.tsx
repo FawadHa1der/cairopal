@@ -37,8 +37,8 @@ const Gallery = () => {
             setPhotos(response.data);
         }
 
-        getNFTS(account);
-    }, [])
+        (!!account) ? getNFTS(account) : getNFTS('0x048bcf2ccba6f1610e7af4c3bbe5a1ee30db815647d8782e66eb18737e8e0c5f')
+    }, [account, hasStarknet])
 
     // const handleSubmit = async (e) => {
     //     await e.preventDefault();
@@ -61,7 +61,7 @@ const Gallery = () => {
     return (
         <div>
             <Head>
-                <title> NextJS Image Gallery</title>
+                <title>Your NFTs, select an image to fractionalize</title>
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <Box overflow="hidden" bg="purple.100" minH="100vh">
@@ -74,7 +74,7 @@ const Gallery = () => {
                         textDecoration="underline"
                         fontSize={["4xl", "4xl", "5xl", "5xl"]}
                     >
-                        NextJS Image Gallery
+                        Your NFTs, select an image to fractionalize
                     </Text>
                     {/* <form onSubmit={handleSubmit}>
                         <InputGroup pb="1rem">
@@ -110,14 +110,16 @@ const Gallery = () => {
                             lineHeight="0"
                             _hover={{ boxShadow: "dark-lg" }}
                         >
-                            <a>
-                                <Image
-                                    src={pic.copy_image_url}
-                                    height={600}
-                                    width={400}
-                                    alt={pic.copy_image_url}
-                                />
-                            </a>
+                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: pic }}>
+                                <a>
+                                    <Image
+                                        src={pic.copy_image_url}
+                                        height={200}
+                                        width={200}
+                                        alt={pic.copy_image_url}
+                                    />
+                                </a>
+                            </Link>
                         </WrapItem>
                     ))}
                 </Wrap>
