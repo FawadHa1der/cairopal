@@ -1,4 +1,6 @@
 import { getPhotoById } from "../../lib/api";
+import { FractionalizeForm } from "components/wallet";
+import React, { useState } from "react";
 import {
   Box,
   Divider,
@@ -17,6 +19,17 @@ import { useRouter } from "next/router";
 export default function Photos() {
   const router = useRouter();
   const pic = router.query;
+
+  console.log("this is router query" + pic);
+  console.log("this is src " + pic.copy_image_url);
+  const [data, setData] = useState();
+  async function fractionalize(user) {
+    const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
+    console.log(response);
+    setPhotos(response.data);
+  }
+
+
   return (
     <Box p="2rem" bg="gray.200" minH="100vh">
       <Head>
@@ -70,16 +83,10 @@ export default function Photos() {
           />
         </Box>
       </Center>
+
+      <FractionalizeForm onRegistered={setData}></FractionalizeForm>
     </Box>
 
   );
 }
 
-// export async function getServerSideProps({ params }) {
-//   const pic = await getPhotoById(params.id);
-//   return {
-//     props: {
-//       pic,
-//     },
-//   };
-// }
