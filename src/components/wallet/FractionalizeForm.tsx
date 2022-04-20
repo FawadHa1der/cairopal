@@ -6,12 +6,12 @@ import { number } from "starknet";
 import { useRouter } from "next/router";
 
 interface IFractionalize {
-    no_of_ricks: number;
-    inflation: number;
+    no_of_ricks: String;
+    inflation: String;
 }
 
 interface IFractionalizeFormProps {
-    onRegistered: (data: IFractionalize) => void;
+    onRegistered: (data: any) => void;
 }
 
 export default function FractionalizeForm({ onRegistered }: IFractionalizeFormProps) {
@@ -54,7 +54,7 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
                 <FormErrorMessage>{errors.no_of_ricks && errors.no_of_ricks.message}</FormErrorMessage>
             </FormControl>
             <FormControl isInvalid={errors.inflation}>
-                <FormLabel required htmlFor="inflation">
+                <FormLabel htmlFor="inflation">
                     Inflation rate (50 = 5%)
                 </FormLabel>
                 <Input

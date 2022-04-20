@@ -21,20 +21,27 @@ import { Button } from "@chakra-ui/react";
 import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
 import axios from "axios";
-
+interface NFTData {
+    contract_address: string;
+    name: string;
+    token_id: string;
+    copy_image_url: string;
+    owner_address: string;
+}
 
 const Gallery = () => {
     const { account, hasStarknet, connectBrowserWallet } = useStarknet();
 
-    const [photos, setPhotos] = useState(null);
+    const [photos, setPhotos] = useState<NFTData[]>();
     const [query, setQuery] = useState("");
     const toast = useToast();
     // const [nfts, setNFTS] = useState();
     useEffect(() => {
         async function getNFTS(user: String) {
-            const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
-            console.log(response);
-            setPhotos(response.data);
+            fetch("https://api-testnet.playoasisx.com/assets?owner_address=" + user)
+                .then(res => res.json())
+                .then(setPhotos)
+            console.log(photos);
         }
 
         (!!account) ? getNFTS(account) : getNFTS('0x048bcf2ccba6f1610e7af4c3bbe5a1ee30db815647d8782e66eb18737e8e0c5f')
@@ -110,7 +117,7 @@ const Gallery = () => {
                             lineHeight="0"
                             _hover={{ boxShadow: "dark-lg" }}
                         >
-                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: pic }}>
+                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: { object: JSON.stringify(pic) } }}>
                                 <a>
                                     <Image
                                         src={pic.copy_image_url}
