@@ -5,13 +5,13 @@ import { FormErrorMessage, FormLabel, FormControl, Input, Button } from "@chakra
 import { number } from "starknet";
 import { useRouter } from "next/router";
 
-interface IFractionalize {
-    no_of_ricks: String;
-    inflation: String;
+export interface IFractionalize {
+    no_of_ricks: string;
+    inflation: string;
 }
 
 interface IFractionalizeFormProps {
-    onRegistered: (data: any) => void;
+    onRegistered: (data: IFractionalize) => void;
 }
 
 export default function FractionalizeForm({ onRegistered }: IFractionalizeFormProps) {
@@ -19,11 +19,12 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
         handleSubmit, // handels the form submit event
         register, // ties the inputs to react-form
         formState: { errors, isSubmitting }, // gets errors and "loading" state
-    } = useForm();
+    } = useForm<IFractionalize>();
 
 
     const router = useRouter();
-    const pic = router.query;
+    // const pic = router.query;
+    const pic = JSON.parse(router.query.object as string);
 
     return (
         <form onSubmit={handleSubmit(onRegistered)} noValidate>
@@ -34,7 +35,7 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
                     {/* the form label from chakra ui is tied to the input via the htmlFor attribute */}
                 </FormLabel>
             </FormControl >
-            <FormControl isInvalid={errors.no_of_ricks} >
+            <FormControl isInvalid={!!errors.no_of_ricks ? true : false} >
                 <FormLabel htmlFor="no_of_ricks">
                     No of Initial Ricks
                     {/* the form label from chakra ui is tied to the input via the htmlFor attribute */}
@@ -51,9 +52,9 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
                     }
                 ></Input>
                 {/* react-form will calculate the errors on submit or on dirty state */}
-                <FormErrorMessage>{errors.no_of_ricks && errors.no_of_ricks.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.no_of_ricks && errors?.no_of_ricks?.message}</FormErrorMessage>
             </FormControl>
-            <FormControl isInvalid={errors.inflation}>
+            <FormControl isInvalid={!!errors.inflation ? true : false}>
                 <FormLabel htmlFor="inflation">
                     Inflation rate (50 = 5%)
                 </FormLabel>
@@ -64,7 +65,7 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
                         required: "please enter the inflation rate?",
                     })}
                 ></Input>
-                <FormErrorMessage>{errors.inflation && errors.inflation.message}</FormErrorMessage>
+                <FormErrorMessage>{errors.inflation && errors?.inflation?.message}</FormErrorMessage>
             </FormControl>
             <Button mt={10} colorScheme="blue" isLoading={isSubmitting} type="submit">
                 Fractionalize 🐱‍🏍

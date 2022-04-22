@@ -1,6 +1,8 @@
-import { getPhotoById } from "../../lib/api";
 import { FractionalizeForm } from "components/wallet";
-import React, { useState } from "react";
+import { NFTData } from "components/wallet/Gallery";
+import { useState } from "react";
+import { IFractionalize } from "components/wallet/FractionalizeForm";
+
 import {
   Box,
   Divider,
@@ -18,22 +20,34 @@ import { useRouter } from "next/router";
 
 export default function Photos() {
   const router = useRouter();
-  const pic = router.query;
+  const [data, setData] = useState<IFractionalize>();
+  let pic = null;
+  if (router.isReady) {
+    const queryString = router.query.data;
+    console.log("this is router query" + queryString);
+    pic = !!router.query.data ? (JSON.parse(router.query.data as string) as NFTData) : null;
+    //   = router.query;
 
-  console.log("this is router query" + pic);
-  console.log("this is src " + pic.copy_image_url);
-  const [data, setData] = useState();
-  async function fractionalize(user) {
-    const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
-    console.log(response);
-    setPhotos(response.data);
+    console.log("this is router query" + pic);
+    console.log("this is src " + pic?.copy_image_url);
   }
-
+  else {
+    console.log('we are not ready');
+  }
+  // async function fractionalize(user: string) {
+  //   const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
+  //   console.log(response);
+  //   setPhotos(response.data);
+  // }
+  function onRegistered(data: IFractionalize) {
+    setData(data);
+    console.log("onRegistered called " + data);
+  }
 
   return (
     <Box p="2rem" bg="gray.200" minH="100vh">
       <Head>
-        <title> Image: {pic.name}</title>
+        <title> Image: {pic?.name}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -44,15 +58,12 @@ export default function Photos() {
           as="h2"
           fontWeight="semibold"
           fontSize="xl"
-          as="a"
-          target="_blank"
-          href={pic.name}
         >
           <AtSignIcon />
-          {pic.description}
+          {pic?.description}
         </Text>
         <Spacer />
-        <Box as="a" target="_blank" href={pic.copy_image_url}>
+        <Box as="a" target="_blank" href={pic?.copy_image_url}>
           <InfoIcon focusable="true" boxSize="2rem" color="red.500" />{" "}
         </Box>{" "}
         <Spacer />
@@ -72,9 +83,9 @@ export default function Photos() {
       <Divider my="1rem" />
 
       <Center>
-        <Box as="a" target="_blank" href={pic.copy_image_url}>
+        <Box as="a" target="_blank" href={pic?.copy_image_url}>
           <Image
-            src={pic.copy_image_url}
+            src={(!!pic) ? pic.copy_image_url : 'https://cnn.com'}
             width={300}
             height={300}
             quality={50}
@@ -84,7 +95,7 @@ export default function Photos() {
         </Box>
       </Center>
 
-      <FractionalizeForm onRegistered={setData}></FractionalizeForm>
+      <FractionalizeForm onRegistered={onRegistered}></FractionalizeForm>
     </Box>
 
   );

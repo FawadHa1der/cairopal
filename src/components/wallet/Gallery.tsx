@@ -16,14 +16,14 @@ import {
     Flex,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
-import { getQueryPhotos } from "../../lib/api";
 import { Button } from "@chakra-ui/react";
 import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
 import axios from "axios";
-interface NFTData {
+export interface NFTData {
     contract_address: string;
     name: string;
+    description: string;
     token_id: string;
     copy_image_url: string;
     owner_address: string;
@@ -37,7 +37,7 @@ const Gallery = () => {
     const toast = useToast();
     // const [nfts, setNFTS] = useState();
     useEffect(() => {
-        async function getNFTS(user: String) {
+        async function getNFTS(user: string) {
             fetch("https://api-testnet.playoasisx.com/assets?owner_address=" + user)
                 .then(res => res.json())
                 .then(setPhotos)
@@ -117,7 +117,7 @@ const Gallery = () => {
                             lineHeight="0"
                             _hover={{ boxShadow: "dark-lg" }}
                         >
-                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: { object: JSON.stringify(pic) } }}>
+                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: { data: JSON.stringify(pic) } }}>
                                 <a>
                                     <Image
                                         src={pic.copy_image_url}
