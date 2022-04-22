@@ -1,5 +1,5 @@
 import { FractionalizeForm } from "components/wallet";
-import { NFTData } from "components/wallet/Gallery";
+import { NFTData } from "components/wallet/NFTData";
 import { useState } from "react";
 import { IFractionalize } from "components/wallet/FractionalizeForm";
 
@@ -21,19 +21,7 @@ import { useRouter } from "next/router";
 export default function Photos() {
   const router = useRouter();
   const [data, setData] = useState<IFractionalize>();
-  let pic = null;
-  if (router.isReady) {
-    const queryString = router.query.data;
-    console.log("this is router query" + queryString);
-    pic = !!router.query.data ? (JSON.parse(router.query.data as string) as NFTData) : null;
-    //   = router.query;
-
-    console.log("this is router query" + pic);
-    console.log("this is src " + pic?.copy_image_url);
-  }
-  else {
-    console.log('we are not ready');
-  }
+  const pic = JSON.parse(router.query.data as string) as NFTData;
   // async function fractionalize(user: string) {
   //   const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
   //   console.log(response);
@@ -95,7 +83,7 @@ export default function Photos() {
         </Box>
       </Center>
 
-      <FractionalizeForm onRegistered={onRegistered}></FractionalizeForm>
+      <FractionalizeForm onRegistered={onRegistered} nftdata={pic}  ></FractionalizeForm>
     </Box>
 
   );

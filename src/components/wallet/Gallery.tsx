@@ -20,14 +20,7 @@ import { Button } from "@chakra-ui/react";
 import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
 import axios from "axios";
-export interface NFTData {
-    contract_address: string;
-    name: string;
-    description: string;
-    token_id: string;
-    copy_image_url: string;
-    owner_address: string;
-}
+import { NFTData } from "./NFTData";
 
 const Gallery = () => {
     const { account, hasStarknet, connectBrowserWallet } = useStarknet();

@@ -4,6 +4,7 @@ import React from "react";
 import { FormErrorMessage, FormLabel, FormControl, Input, Button } from "@chakra-ui/react";
 import { number } from "starknet";
 import { useRouter } from "next/router";
+import { NFTData } from "./NFTData";
 
 export interface IFractionalize {
     no_of_ricks: string;
@@ -12,9 +13,10 @@ export interface IFractionalize {
 
 interface IFractionalizeFormProps {
     onRegistered: (data: IFractionalize) => void;
+    nftdata: NFTData;
 }
 
-export default function FractionalizeForm({ onRegistered }: IFractionalizeFormProps) {
+export default function FractionalizeForm({ onRegistered, nftdata }: IFractionalizeFormProps) {
     const {
         handleSubmit, // handels the form submit event
         register, // ties the inputs to react-form
@@ -24,7 +26,7 @@ export default function FractionalizeForm({ onRegistered }: IFractionalizeFormPr
 
     const router = useRouter();
     // const pic = router.query;
-    const pic = JSON.parse(router.query.object as string);
+    const pic = nftdata;
 
     return (
         <form onSubmit={handleSubmit(onRegistered)} noValidate>
