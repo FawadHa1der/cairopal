@@ -18,6 +18,7 @@ import Link from "next/link";
 import { InfoIcon, AtSignIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 
+
 export default function Photos() {
   const router = useRouter();
   const [data, setData] = useState<IFractionalize>();
@@ -27,9 +28,11 @@ export default function Photos() {
   //   console.log(response);
   //   setPhotos(response.data);
   // }
-  function onRegistered(data: IFractionalize) {
-    setData(data);
-    console.log("onRegistered called " + data);
+  // const onRegistered = () => {
+  // }
+  function onRegistered(fractionData: IFractionalize) {
+    setData(fractionData);
+    console.log("onRegistered called ", JSON.stringify(fractionData));
   }
 
   return (
@@ -55,7 +58,7 @@ export default function Photos() {
           <InfoIcon focusable="true" boxSize="2rem" color="red.500" />{" "}
         </Box>{" "}
         <Spacer />
-        <Link href={`/`} >
+        <Link href="/" >
           <Button
             as="a"
             borderRadius="full"
@@ -83,8 +86,8 @@ export default function Photos() {
         </Box>
       </Center>
 
-      <FractionalizeForm onRegistered={onRegistered} nftdata={pic}  ></FractionalizeForm>
-    </Box>
+      <FractionalizeForm onRegistered={onRegistered} nftdata={pic} />
+    </Box >
 
   );
 }

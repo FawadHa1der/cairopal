@@ -19,7 +19,6 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
 import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
-import axios from "axios";
 import { NFTData } from "./NFTData";
 
 const Gallery = () => {
@@ -37,7 +36,11 @@ const Gallery = () => {
             console.log(photos);
         }
 
-        (!!account) ? getNFTS(account) : getNFTS('0x048bcf2ccba6f1610e7af4c3bbe5a1ee30db815647d8782e66eb18737e8e0c5f')
+        if (!!account) {
+            getNFTS(account);
+        } else {
+            getNFTS('0x048bcf2ccba6f1610e7af4c3bbe5a1ee30db815647d8782e66eb18737e8e0c5f');
+        }
     }, [account, hasStarknet])
 
     // const handleSubmit = async (e) => {
