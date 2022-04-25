@@ -113,7 +113,7 @@ const Gallery = () => {
                             lineHeight="0"
                             _hover={{ boxShadow: "dark-lg" }}
                         >
-                            <Link href={{ pathname: `/photos/${pic.token_id}`, query: { data: JSON.stringify(pic) } }}>
+                            <Link href={{ pathname: `/photos`, query: { data: JSON.stringify(pic) } }}>
                                 <a>
                                     <Image
                                         src={pic.copy_image_url}

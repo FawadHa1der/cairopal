@@ -33,7 +33,7 @@ export default function FractionalizeForm({ onRegistered, nftdata }: IFractional
             {/* noValidate will stop the browser validation, so we can write our own designs and logic */}
             <FormControl >
                 <FormLabel >
-                    Token ID {pic.token_id}
+                    Token ID {pic?.token_id}
                     {/* the form label from chakra ui is tied to the input via the htmlFor attribute */}
                 </FormLabel>
             </FormControl >
