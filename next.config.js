@@ -18,16 +18,16 @@ module.exports = withPWA({
   images: {
     domains: ['0xoasis-media-testnet.s3.amazonaws.com'],
   },
-  webpack: (config, { isServer }) => {
-    // Fixes npm packages that depend on `fs` module
-    if (!isServer) {
-      config.node = {
-        fs: 'empty'
-      }
-    }
+  // webpack: (config, { isServer }) => {
+  //   // Fixes npm packages that depend on `fs` module
+  //   if (!isServer) {
+  //     config.node = {
+  //       fs: 'empty'
+  //     }
+  //   }
 
-    return config
-  },
+  //   return config
+  // },
   build: {
     extend(config, { }) {
       config.node = {
