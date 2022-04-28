@@ -41,7 +41,7 @@
 		"react-dom": "^17.0.2",
 		"react-hook-form": "^7.30.0",
 		"react-icons": "^4.3.1",
-		"starknet": "github:FawadHa1der/starknet.js#develop",
+		"starknet": "git+https://github.com/fawadha1der/starknet.js.git#develop",
 		"use-deep-compare-effect": "^1.8.1"
 	},
 	"devDependencies": {
