@@ -28,6 +28,7 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
+
   return (
     <StarknetProvider>
       <CacheProvider value={emotionCache}>

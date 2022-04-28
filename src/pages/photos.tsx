@@ -39,7 +39,7 @@ import {
 
 
 export async function getStaticProps() {
-  const compiledDirectory = path.join(process.cwd(), './public/compiledcairo');
+  const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
   const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
 
   const fullRicksPath = path.join(compiledDirectory, "ricks.json");
@@ -83,7 +83,7 @@ export default function Photos(props: PhotoProps) {
     toast({ description: 'This might take 3-10 mins deploying to goerli test net' })
     const { stakingpool } = props.stakingpool;
     const stakingpoolresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(stakingpool)
+      contract: json.parse(stakingpool)
     });
 
     // const stakingpoolresponse = await defaultProvider.deployContract({
@@ -125,7 +125,7 @@ export default function Photos(props: PhotoProps) {
     const ricks = props.ricks;
 
     const ricksresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(ricks),
+      contract: json.parse(ricks),
       constructorCalldata: callDatahash
     });
     // const ricksresponse = await defaultProvider.deployContract({
@@ -190,7 +190,7 @@ export default function Photos(props: PhotoProps) {
       <Center>
         <Box as="a" target="_blank" href={pic?.copy_image_url}>
           <Image
-            src={(!!pic) ? pic.copy_image_url : '/vercel.svg'}
+            src={(!!pic) ? (!!pic.copy_image_url) ? pic.copy_image_url : '/vercel.svg' : '/vercel.svg'}
             width={300}
             height={300}
             loading="eager"

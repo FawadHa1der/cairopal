@@ -25,7 +25,6 @@ const Gallery = () => {
     const { account, hasStarknet, connectBrowserWallet } = useStarknet();
 
     const [photos, setPhotos] = useState<NFTData[]>();
-    const [query, setQuery] = useState("");
     const toast = useToast();
     // const [nfts, setNFTS] = useState();
     useEffect(() => {
@@ -34,6 +33,11 @@ const Gallery = () => {
                 .then(res => res.json())
                 .then(setPhotos)
             console.log(photos);
+            // return () => {
+            //     setQuery({}); // This worked for me
+            //     setPhotos();
+            // };
+
         }
 
         if (!!account) {
@@ -116,10 +120,10 @@ const Gallery = () => {
                             <Link href={{ pathname: `/photos`, query: { data: JSON.stringify(pic) } }}>
                                 <a>
                                     <Image
-                                        src={pic.copy_image_url}
+                                        src={(!!pic.copy_image_url) ? pic.copy_image_url : '/vercel.svg'}
                                         height={200}
                                         width={200}
-                                        alt={pic.copy_image_url}
+                                        alt={(!!pic.copy_image_url) ? pic.copy_image_url : '/vercel.svg'}
                                     />
                                 </a>
                             </Link>
@@ -139,7 +143,7 @@ const Gallery = () => {
                             src="/vercel.svg"
                             width={283 / 4}
                             height={64 / 4}
-                            alt="Vercel Logo"
+                            alt="/vercel.svg"
                         />
                     </a>
                 </Flex>
