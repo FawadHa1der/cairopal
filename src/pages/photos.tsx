@@ -21,6 +21,7 @@ import Link from "next/link";
 import { InfoIcon, AtSignIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import fs from 'fs';
+import path from 'path';
 import {
   Contract,
   Account,
@@ -33,28 +34,15 @@ import {
   stark,
   shortString
 } from "starknet";
-import path from 'path';
 
 import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
 
-function stringify(value) {
-  if (value !== undefined) {
-    return JSON.stringify(value, (_, v) => typeof v === 'bigint' ? `${v}n` : v);
-  }
-}
 
 export async function getStaticProps() {
   const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
   const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
 
   const fullRicksPath = path.join(compiledDirectory, "ricks.json");
-  const stakingpool = stringify(json.parse(
-    fs.readFileSync(fullStakingPath).toString("ascii")
-  ) as string);
-
-  const ricks = stringify(json.parse(
-    fs.readFileSync(fullRicksPath).toString("ascii")
-  ));
 
   //  JSON.parse(JSON.stringify(request.results)); 
 
@@ -64,14 +52,16 @@ export async function getStaticProps() {
 export default function Photos(props) {
   const router = useRouter();
   const [data, setData] = useState<IFractionalize>();
+  const [pic, setPic] = useState<NFTData>();
 
   console.log("props  ", props);
 
-  let pic = null;
+  // let pic = null;
   // console.log("pic ", query);
   useEffect(() => {
     if (!!router.query.data)
-      pic = JSON.parse(router.query.data as string) as NFTData;
+      setPic(JSON.parse(router.query.data as string) as NFTData);
+    console.log("pic  ", pic);
   }, [router.query]);
 
   const toast = useToast();
