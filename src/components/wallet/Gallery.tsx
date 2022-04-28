@@ -20,6 +20,7 @@ import { Button } from "@chakra-ui/react";
 import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
 import { NFTData } from "./NFTData";
+import { getStarknet } from "@argent/get-starknet"
 
 const Gallery = () => {
     const { account, hasStarknet, connectBrowserWallet } = useStarknet();
@@ -40,10 +41,17 @@ const Gallery = () => {
 
         }
 
+        async function enableArgentX() {
+            // Check if wallet extension is installed and initialized.
+            const starknet = getStarknet()
+            // May throw when no extension is detected, otherwise shows a modal prompting the user to download Argent X.
+            const [userWalletContractAddress] = await starknet.enable({ showModal: true })
+        }
+
         if (!!account) {
             getNFTS(account);
         } else {
-            getNFTS('0x048bcf2ccba6f1610e7af4c3bbe5a1ee30db815647d8782e66eb18737e8e0c5f');
+            enableArgentX()
         }
     }, [account, hasStarknet])
 
