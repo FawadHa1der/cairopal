@@ -40,17 +40,17 @@ import {
 import stakingpoolabi from "./compiledcairo/stakingpool.json";
 import ricksabi from "./compiledcairo/ricks.json";
 
-export async function getStaticProps() {
-  // const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
-  // const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
+// export async function getStaticProps() {
+//   // const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
+//   // const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
 
-  // const fullRicksPath = path.join(compiledDirectory, "ricks.json");
+//   // const fullRicksPath = path.join(compiledDirectory, "ricks.json");
 
-  //  JSON.parse(JSON.stringify(request.results)); 
-  // return { props: { stakingpool: fs.readFileSync("../../src/compiledcairo/StakingPool.json").toString("ascii"), ricks: fs.readFileSync(fullRicksPath).toString("ascii") } };
+//   //  JSON.parse(JSON.stringify(request.results)); 
+//   // return { props: { stakingpool: fs.readFileSync("../../src/compiledcairo/StakingPool.json").toString("ascii"), ricks: fs.readFileSync(fullRicksPath).toString("ascii") } };
 
-  return { props: { stakingpool: stakingpoolabi, ricks: ricksabi } };
-}
+//   return { props: { stakingpool: stakingpoolabi, ricks: ricksabi } };
+// }
 interface PhotoProps {
   stakingpool: any;
   ricks: any;
@@ -84,9 +84,9 @@ export default function Photos(props: PhotoProps) {
 
     setData(fractionData);
     toast({ description: 'This might take 3-10 mins deploying to goerli test net' })
-    const { stakingpool } = props.stakingpool;
+    // const { stakingpool } = props.stakingpool;
     const stakingpoolresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(stakingpool)
+      contract: stakingpoolabi
     });
 
     // const stakingpoolresponse = await defaultProvider.deployContract({
@@ -128,7 +128,7 @@ export default function Photos(props: PhotoProps) {
     const ricks = props.ricks;
 
     const ricksresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(ricks),
+      contract: ricksabi,
       constructorCalldata: callDatahash
     });
     // const ricksresponse = await defaultProvider.deployContract({
