@@ -39,7 +39,7 @@ import {
 
 
 export async function getStaticProps() {
-  const compiledDirectory = path.join(process.cwd(), './src/pages/compiledcairo');
+  const compiledDirectory = path.join(process.cwd(), './public/compiledcairo');
   const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
 
   const fullRicksPath = path.join(compiledDirectory, "ricks.json");
