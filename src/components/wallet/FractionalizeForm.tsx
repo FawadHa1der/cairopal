@@ -13,7 +13,7 @@ export interface IFractionalize {
 
 interface IFractionalizeFormProps {
     onRegistered: (data: IFractionalize) => void;
-    nftdata: NFTData;
+    nftdata: NFTData | undefined;
 }
 
 export default function FractionalizeForm({ onRegistered, nftdata }: IFractionalizeFormProps) {

@@ -18,7 +18,7 @@ const IncrementCounter = () => {
 
   const { account } = useStarknet();
   const { contract } = useContract({
-    abi: CounterAbi as Abi[],
+    abi: (CounterAbi as unknown) as Abi[],
     address: CONTRACT_ADDRESS,
   });
   const { invoke } = useStarknetInvoke({

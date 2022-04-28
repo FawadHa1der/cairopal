@@ -35,7 +35,7 @@ import {
   shortString
 } from "starknet";
 
-import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
+// import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
 
 
 export async function getStaticProps() {
@@ -48,8 +48,12 @@ export async function getStaticProps() {
 
   return { props: { stakingpool: fs.readFileSync(fullStakingPath).toString("ascii"), ricks: fs.readFileSync(fullRicksPath).toString("ascii") } };
 }
+interface PhotoProps {
+  stakingpool: any;
+  ricks: any;
+}
 
-export default function Photos(props) {
+export default function Photos(props: PhotoProps) {
   const router = useRouter();
   const [data, setData] = useState<IFractionalize>();
   const [pic, setPic] = useState<NFTData>();
@@ -77,8 +81,9 @@ export default function Photos(props) {
 
     setData(fractionData);
     toast({ description: 'This might take 3-10 mins deploying to goerli test net' })
+    const { stakingpool } = props.stakingpool;
     const stakingpoolresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(props.stakingpool)
+      contract: JSON.parse(stakingpool)
     });
 
     // const stakingpoolresponse = await defaultProvider.deployContract({
@@ -103,22 +108,24 @@ export default function Photos(props) {
     // ricks_impl, abi = nre.deploy(
     //   "ricks", arguments=[f'{ricks}', f'{ricks}', f'{18}', f'{INITIAL_RICKS_SUPPLY}', f'{DAILY_INFLATION_RATE}', f'{AUCTION_LENGTH}', f'{AUCTION_INTERVAL}', f'{MIN_BID_INCREASE}', f'{stakingpool_impl}', f'{TEST_REWARD_TOKEN_ADDRESS}'], alias="ricks")
 
-
+    console.log("staking pool address", (stakingpoolresponse.address))
     const callDatahash = stark.compileCalldata({
       name: shortString.encodeShortString("ricks"),
       symbol: shortString.encodeShortString("ricks"),
-      decimals: shortString.encodeShortString('18'),
-      _initial_supply: shortString.encodeShortString('100'),
-      _daily_inflation_rate: shortString.encodeShortString('50'),
-      _auction_length: shortString.encodeShortString('10800'),
-      _auction_interval: shortString.encodeShortString('0'),
-      _min_bid_increase: shortString.encodeShortString('10'),
-      _staking_pool_contract: (!!stakingpoolresponse.address)?.toString(),
+      decimals: '18',
+      _initial_supply: '100',
+      _daily_inflation_rate: '50',
+      _auction_length: '10800',
+      _auction_interval: '0',
+      _min_bid_increase: '10',
+      _staking_pool_contract: (stakingpoolresponse.address)?.toString() as string,
       _reward_contract: '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10'
     });
 
+    const ricks = props.ricks;
+
     const ricksresponse = await defaultProvider.deployContract({
-      contract: JSON.parse(props.ricks),
+      contract: JSON.parse(ricks),
       constructorCalldata: callDatahash
     });
     // const ricksresponse = await defaultProvider.deployContract({
@@ -136,7 +143,7 @@ export default function Photos(props) {
 
     toast.closeAll()
 
-    let info = 'StakingPool address is ${(!!stakingpoolresponse.address)?.toString()} \n Ricks address is ${(!!ricksresponse.address)?.toString()}';
+    const info = `StakingPool address is ${stakingpoolresponse.address?.toString()} \n Ricks address is ${(ricksresponse.address)?.toString()}`;
     console.log(info)
     toast({ description: info });
 
@@ -182,7 +189,7 @@ export default function Photos(props) {
 
       <Center>
         <Box as="a" target="_blank" href={pic?.copy_image_url}>
-          <img
+          <Image
             src={(!!pic) ? pic.copy_image_url : '/vercel.svg'}
             width={300}
             height={300}
