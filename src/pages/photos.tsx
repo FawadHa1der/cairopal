@@ -105,14 +105,15 @@ export default function Photos(props) {
 
 
     const callDatahash = stark.compileCalldata({
-      name: shortString.encodeShortString("ricks"), symbol: shortString.encodeShortString("ricks"),
+      name: shortString.encodeShortString("ricks"),
+      symbol: shortString.encodeShortString("ricks"),
       decimals: shortString.encodeShortString('18'),
       _initial_supply: shortString.encodeShortString('100'),
       _daily_inflation_rate: shortString.encodeShortString('50'),
       _auction_length: shortString.encodeShortString('10800'),
       _auction_interval: shortString.encodeShortString('0'),
       _min_bid_increase: shortString.encodeShortString('10'),
-      _staking_pool_contract: shortString.encodeShortString((!!stakingpoolresponse.address)?.toString()),
+      _staking_pool_contract: (!!stakingpoolresponse.address)?.toString(),
       _reward_contract: '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10'
     });
 
@@ -181,12 +182,10 @@ export default function Photos(props) {
 
       <Center>
         <Box as="a" target="_blank" href={pic?.copy_image_url}>
-          <Image
+          <img
             src={(!!pic) ? pic.copy_image_url : '/vercel.svg'}
             width={300}
             height={300}
-            quality={50}
-            priority
             loading="eager"
           />
         </Box>
