@@ -37,8 +37,8 @@ import {
 
 // import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
 
-import stakingpoolabi from "../compiledcairo/stakingpool.json";
-import ricksabi from "../compiledcairo/ricks.json";
+import stakingpoolabi from "./compiledcairo/stakingpool.json";
+import ricksabi from "./compiledcairo/ricks.json";
 
 export async function getStaticProps() {
   // const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
