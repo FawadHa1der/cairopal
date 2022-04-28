@@ -37,16 +37,19 @@ import {
 
 // import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
 
+import stakingpoolabi from "../compiledcairo/stakingpool.json";
+import ricksabi from "../compiledcairo/ricks.json";
 
 export async function getStaticProps() {
-  const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
-  const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
+  // const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
+  // const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
 
-  const fullRicksPath = path.join(compiledDirectory, "ricks.json");
+  // const fullRicksPath = path.join(compiledDirectory, "ricks.json");
 
   //  JSON.parse(JSON.stringify(request.results)); 
+  // return { props: { stakingpool: fs.readFileSync("../../src/compiledcairo/StakingPool.json").toString("ascii"), ricks: fs.readFileSync(fullRicksPath).toString("ascii") } };
 
-  return { props: { stakingpool: fs.readFileSync(fullStakingPath).toString("ascii"), ricks: fs.readFileSync(fullRicksPath).toString("ascii") } };
+  return { props: { stakingpool: stakingpoolabi, ricks: ricksabi } };
 }
 interface PhotoProps {
   stakingpool: any;
