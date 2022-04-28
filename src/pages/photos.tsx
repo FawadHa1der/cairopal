@@ -58,6 +58,9 @@ export default function Photos(props: PhotoProps) {
   const [data, setData] = useState<IFractionalize>();
   const [pic, setPic] = useState<NFTData>();
 
+  const [stkAddress, setStkAddress] = useState<string>();
+  const [ricksAddress, setRicksAddress] = useState<string>();
+
   console.log("props  ", props);
 
   // let pic = null;
@@ -80,10 +83,11 @@ export default function Photos(props: PhotoProps) {
   async function onRegistered(fractionData: IFractionalize) {
 
     setData(fractionData);
+    console.log('fractionData  ', fractionData)
     toast({ description: 'This might take 3-10 mins deploying to goerli test net' })
     const { stakingpool } = props.stakingpool;
     const stakingpoolresponse = await defaultProvider.deployContract({
-      contract: json.parse(stakingpool)
+      contract: json.parse(props.stakingpool)
     });
 
     // const stakingpoolresponse = await defaultProvider.deployContract({
@@ -113,8 +117,8 @@ export default function Photos(props: PhotoProps) {
       name: shortString.encodeShortString("ricks"),
       symbol: shortString.encodeShortString("ricks"),
       decimals: '18',
-      _initial_supply: '100',
-      _daily_inflation_rate: '50',
+      _initial_supply: fractionData.no_of_ricks,
+      _daily_inflation_rate: fractionData.inflation,
       _auction_length: '10800',
       _auction_interval: '0',
       _min_bid_increase: '10',
@@ -122,10 +126,10 @@ export default function Photos(props: PhotoProps) {
       _reward_contract: '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10'
     });
 
-    const ricks = props.ricks;
+    const rickscompiled = json.parse(props.ricks);
 
     const ricksresponse = await defaultProvider.deployContract({
-      contract: json.parse(ricks),
+      contract: rickscompiled,
       constructorCalldata: callDatahash
     });
     // const ricksresponse = await defaultProvider.deployContract({
@@ -144,8 +148,29 @@ export default function Photos(props: PhotoProps) {
     toast.closeAll()
 
     const info = `StakingPool address is ${stakingpoolresponse.address?.toString()} \n Ricks address is ${(ricksresponse.address)?.toString()}`;
+    setStkAddress(stakingpoolresponse.address?.toString())
+    setRicksAddress(ricksresponse.address?.toString())
     console.log(info)
-    toast({ description: info });
+
+    const ricks = new Contract(rickscompiled.abi, ricksresponse.address);
+    console.log('pic.contract_address ', pic.contract_address, 'pic.token_id ', pic.token_id);
+
+    const { transaction_hash: activateTxHash } = await ricks.activate(
+      pic.contract_address, pic.token_id
+    );
+
+    toast({ description: 'Activating ricks' });
+
+    console.log(`Waiting for Tx to be Accepted on Starknet - activating...`);
+    await defaultProvider.waitForTransaction(activateTxHash);
+
+    toast.closeAll()
+    const { transaction_hash: startTxHash } = await ricks.start_auction(
+      "10"
+    );
+    toast({ description: 'starting auction' });
+
+    toast.closeAll()
 
   }
 
@@ -199,6 +224,22 @@ export default function Photos(props: PhotoProps) {
       </Center>
 
       <FractionalizeForm onRegistered={onRegistered} nftdata={pic} />
+
+      <Text
+        letterSpacing="wide"
+        textDecoration="underline"
+        as="h3"
+        fontWeight="semibold"
+        fontSize="l"
+      >
+        <Divider my="1rem" />
+
+        Staking Pool Address {stkAddress}
+        <Divider my="1rem" />
+
+        Ricks Address {ricksAddress}
+      </Text>
+
     </Box >
 
   );
