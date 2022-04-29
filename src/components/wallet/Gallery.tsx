@@ -38,14 +38,18 @@ const Gallery = () => {
             //     setQuery({}); // This worked for me
             //     setPhotos();
             // };
-
         }
 
         async function enableArgentX() {
             // Check if wallet extension is installed and initialized.
             const starknet = getStarknet()
             // May throw when no extension is detected, otherwise shows a modal prompting the user to download Argent X.
-            const [userWalletContractAddress] = await starknet.enable({ showModal: true })
+            const [userWalletContractAddress] = await starknet.enable()
+            // checks that enable succeeded
+            if (starknet.isConnected === false) {
+                throw Error("starknet wallet not connected")
+            }
+
         }
 
         if (!!account) {

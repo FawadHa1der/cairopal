@@ -22,7 +22,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
-		"@argent/get-starknet": "^0.1.4",
+		"@argent/get-starknet": "^3.3.0",
 		"@chakra-ui/icons": "^1.1.7",
 		"@chakra-ui/react": "^1.8.8",
 		"@emotion/cache": "^11.7.1",
@@ -33,7 +33,7 @@
 		"@starknet-react/core": "^0.4.4",
 		"framer-motion": "^4.1.17",
 		"fs": "^0.0.1-security",
-		"get-starknet": "git+https://github.com/fawadha1der/argent-x.git#develop",
+		"get-starknet": "git+https://github.com/fawadha1der/argent-x.git#main",
 		"material-react-toastify": "^1.0.1",
 		"next": "^12.0.7",
 		"next-pwa": "^5.4.4",
@@ -43,7 +43,8 @@
 		"react-hook-form": "^7.30.0",
 		"react-icons": "^4.3.1",
 		"starknet": "git+https://github.com/fawadha1der/starknet.js.git#develop",
-		"use-deep-compare-effect": "^1.8.1"
+		"use-deep-compare-effect": "^1.8.1",
+		"web3": "^1.7.3"
 	},
 	"devDependencies": {
 		"@commitlint/config-conventional": "^15.0.0",

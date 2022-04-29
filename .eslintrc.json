@@ -24,6 +24,7 @@
     "react/destructuring-assignment": 0,
     "prefer-destructuring": 0,
     "react/jsx-no-bind": 0,
-    "typescript-eslint/naming-convention": 0
+    "typescript-eslint/naming-convention": 0,
+    "@typescript-eslint/naming-convention": 0
   }
 }

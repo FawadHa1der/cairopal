@@ -22,6 +22,8 @@ import { InfoIcon, AtSignIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import fs from 'fs';
 import path from 'path';
+import { getStarknet } from "@argent/get-starknet";
+
 import {
   Contract,
   Account,
@@ -32,14 +34,12 @@ import {
   json,
   number,
   stark,
-  shortString
+  shortString,
+  Abi
 } from "starknet";
-
-import { getStarknet } from "@argent/get-starknet"
-
+import { sendTransaction } from "utils/blockchain/starknet";
 
 // import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
-
 
 export async function getStaticProps() {
   const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
@@ -68,61 +68,6 @@ interface PhotoProps {
 }
 
 
-export const createContract = (address, ABI) => {
-  return new Contract(ABI, address, getStarknet().provider);
-};
-
-export const callContract = async (contract, method, ...args) => {
-  try {
-    return await contract.call(method, args);
-  } catch (ex) {
-    return Promise.reject(ex);
-  }
-};
-
-export const sendTransaction = async (contract, method, args = {}) => {
-  try {
-    const calldata = stark.compileCalldata(args);
-    const transaction = {
-      contractAddress: contract.address,
-      entrypoint: method,
-      calldata
-    };
-    return await getStarknet().account.execute(transaction);
-  } catch (ex) {
-    return Promise.reject(ex);
-  }
-};
-
-export const waitForTransaction = async (transactionHash, requiredStatus, retryInterval = 5000) => {
-  return new Promise((resolve, reject) => {
-    let processing = false;
-    const intervalId = setInterval(async () => {
-      if (processing) return;
-      const statusPromise = defaultProvider.getTransactionStatus(transactionHash);
-      processing = true;
-      try {
-        const { tx_status } = await statusPromise;
-        if (
-          tx_status === requiredStatus ||
-          (TransactionStatusStep[tx_status] > TransactionStatusStep[requiredStatus] &&
-            !isRejected(tx_status))
-        ) {
-          clearInterval(intervalId);
-          resolve(tx_status);
-        } else if (isRejected(tx_status)) {
-          clearInterval(intervalId);
-          reject();
-        } else {
-          processing = false;
-        }
-      } catch (ex) {
-        processing = false;
-      }
-    }, retryInterval);
-  });
-};
-
 export default function Photos(props: PhotoProps) {
   const rewardToken = '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10';
 
@@ -132,8 +77,6 @@ export default function Photos(props: PhotoProps) {
 
   const [stkAddress, setStkAddress] = useState<string>();
   const [ricksAddress, setRicksAddress] = useState<string>();
-
-
 
   console.log("props  ", props);
 
@@ -201,7 +144,7 @@ export default function Photos(props: PhotoProps) {
 
     const rickscompiled = json.parse(props.ricks);
 
-    const ricksresponse = await defaultProvider.deployContract({
+    const ricksresponse = await getStarknet().provider.deployContract({
       contract: rickscompiled,
       constructorCalldata: callDatahash
     });
@@ -217,7 +160,6 @@ export default function Photos(props: PhotoProps) {
 
     console.log("Waiting for Tx to be Accepted on Starknet - ricks Deployment...");
     await getStarknet().provider.waitForTransaction(ricksresponse.transaction_hash);
-
 
     const info = `StakingPool address is ${stakingpoolresponse.address?.toString()} \n Ricks address is ${(ricksresponse.address)?.toString()}`;
     setStkAddress(stakingpoolresponse.address?.toString())
@@ -236,13 +178,13 @@ export default function Photos(props: PhotoProps) {
     console.log('pic.contract_address ', pic?.contract_address, 'pic.token_id ', pic?.token_id);
     console.log(`Waiting for Tx to be Accepted on Starknet - Approval for ricks for the token...`);
 
-    //toast.closeAll()
+    // toast.closeAll()
     toast({ description: 'Giving approval to ricks for the nft' });
+    // AddTransactionResponse
+    const transaction_response = await sendTransaction(erc721, erc721.approve, { to: ricksresponse?.address?.toString() as string, tokenId: pic?.token_id as string })
+    // const { transaction_hash: approveTxHash } = getStarknet().account.execute(erc721.approve(
 
-    //sendTransaction(erc721, erc721.approve,)
-    const { transaction_hash: approveTxHash } = getStarknet().account.execute(erc721.approve(
-      ricksresponse.address, [0, pic?.token_id as string]
-    ));
+    // ));
 
     // const { transaction_hash: approveTxHash } = await erc721.approve(
     //   ricksresponse.address, [0, pic?.token_id as string]
@@ -253,7 +195,6 @@ export default function Photos(props: PhotoProps) {
     const { transaction_hash: approveerc20TxHash } = await erc20.approve(
       ricksresponse.address, [0, '100000']
     );
-
 
     toast.closeAll()
     toast({ description: 'Activating ricks', duration: Infinity });
