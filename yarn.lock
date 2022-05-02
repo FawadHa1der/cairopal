@@ -19,10 +19,9 @@
     jsonpointer "^5.0.0"
     leven "^3.1.0"
 
-"@argent/get-starknet@^3.3.0":
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/@argent/get-starknet/-/get-starknet-3.3.0.tgz#3b6242f44c5c9361985149eac5dc156475a6b3d6"
-  integrity sha512-XnKxU9AVUBCg4IcdiTUhxNrj3v5lQ390zDYIBZY0PnXrELeWbdBJDtUIc2CjH73uPoM9TXdX3a+pJxIAhuQxvA==
+"@argent/get-starknet@git+https://github.com/fawadha1der/argent-x.git#main":
+  version "0.1.0"
+  resolved "git+https://github.com/fawadha1der/argent-x.git#fe5ad633ccfc5734e657ddde8af22943d34793d3"
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"
@@ -5191,10 +5190,6 @@ get-port-please@^2.5.0:
   integrity sha512-NblPebBznYARC1R2r1qmusbJAAgBr954gWhEZgwTerzR8r3ud6U5PI1SG4Lue43r87aikPPjObs85VieIDK99A==
   dependencies:
     fs-memo "^1.2.0"
-
-"get-starknet@git+https://github.com/fawadha1der/argent-x.git#main":
-  version "0.1.0"
-  resolved "git+https://github.com/fawadha1der/argent-x.git#fe5ad633ccfc5734e657ddde8af22943d34793d3"
 
 get-stream@^3.0.0:
   version "3.0.0"
