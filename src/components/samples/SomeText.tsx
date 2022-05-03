@@ -9,15 +9,27 @@ import { getStarknet } from "get-starknet";
 import { useEffect, useState } from "react";
 
 const SomeText = () => {
-  const [account, setAccount] = useState(getStarknet().account.address)
+
+  const enable = async () => {
+    const [userWalletContractAddress] = await getStarknet().enable()
+    if (getStarknet().isConnected === false) {
+      throw Error("starknet wallet not connected")
+    }
+    else {
+      console.log('connected with ', getStarknet().account.address)
+      setAccount(getStarknet().account.address)
+    }
+  }
+  enable()
+  const [account, setAccount] = useState("")
   const { colorMode } = useColorMode();
   const textSize = useBreakpointValue({
     base: "xs",
     sm: "md",
   });
   useEffect(() => {
-    setAccount(getStarknet().account.address)
-  }, [getStarknet().account.address])
+    enable()
+  }, [getStarknet().isConnected])
 
   return (
     <>

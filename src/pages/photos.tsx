@@ -144,10 +144,11 @@ export default function Photos(props: PhotoProps) {
 
     const rickscompiled = json.parse(props.ricks);
 
-    const ricksresponse = await getStarknet().provider.deployContract({
+    const ricksresponse = await defaultProvider.deployContract({
       contract: rickscompiled,
       constructorCalldata: callDatahash
     });
+
     // const ricksresponse = await defaultProvider.deployContract({
     //   contract: JSON.parse(props.ricks, (key, value) => {
     //     if (typeof value === "string" && /^\d+n$/.test(value)) {
@@ -159,7 +160,7 @@ export default function Photos(props: PhotoProps) {
     // });
 
     console.log("Waiting for Tx to be Accepted on Starknet - ricks Deployment...");
-    await getStarknet().provider.waitForTransaction(ricksresponse.transaction_hash);
+    await defaultProvider.waitForTransaction(ricksresponse.transaction_hash);
 
     const info = `StakingPool address is ${stakingpoolresponse.address?.toString()} \n Ricks address is ${(ricksresponse.address)?.toString()}`;
     setStkAddress(stakingpoolresponse.address?.toString())
@@ -178,7 +179,7 @@ export default function Photos(props: PhotoProps) {
     console.log('pic.contract_address ', pic?.contract_address, 'pic.token_id ', pic?.token_id);
     console.log(`Waiting for Tx to be Accepted on Starknet - Approval for ricks for the token...`);
 
-    // toast.closeAll()
+    toast.closeAll()
     toast({ description: 'Giving approval to ricks for the nft' });
     // AddTransactionResponse
     const transaction_response = await sendTransaction(erc721, erc721.approve, { to: ricksresponse?.address?.toString() as string, tokenId: pic?.token_id as string })
@@ -190,7 +191,7 @@ export default function Photos(props: PhotoProps) {
     //   ricksresponse.address, [0, pic?.token_id as string]
     // );
 
-    //    toast.closeAll()
+    toast.closeAll()
     toast({ description: 'Giving approval to ricks for the reward token' });
     const { transaction_hash: approveerc20TxHash } = await erc20.approve(
       ricksresponse.address, [0, '100000']

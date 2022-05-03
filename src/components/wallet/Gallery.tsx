@@ -27,6 +27,9 @@ const Gallery = () => {
     const [photos, setPhotos] = useState<NFTData[]>();
     const toast = useToast();
     // const [nfts, setNFTS] = useState();
+
+
+
     useEffect(() => {
         async function getNFTS(user: string) {
             fetch("https://api-testnet.playoasisx.com/assets?owner_address=" + user)
@@ -38,6 +41,18 @@ const Gallery = () => {
             //     setPhotos();
             // };
         }
+        const enable = async () => {
+            const [userWalletContractAddress] = await getStarknet().enable()
+            if (getStarknet().isConnected === false) {
+                throw Error("starknet wallet not connected")
+            }
+            else {
+                console.log('connected with ', getStarknet().account.address)
+                getNFTS(getStarknet().account.address);
+            }
+        }
+        enable()
+
 
         async function enableArgentX() {
             // Check if wallet extension is installed and initialized.
@@ -50,11 +65,11 @@ const Gallery = () => {
             }
         }
 
-        if (getStarknet().isConnected === true) {
-            getNFTS(getStarknet().account.address);
-        } else {
-            enableArgentX()
-        }
+        // if (getStarknet().isConnected === true) {
+
+        // } else {
+        //     // enableArgentX()
+        // }
     }, [getStarknet().isConnected])
 
     // const handleSubmit = async (e) => {

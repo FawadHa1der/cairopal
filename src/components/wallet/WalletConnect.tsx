@@ -4,29 +4,51 @@ import { getStarknet } from "get-starknet";
 import { useEffect, useState } from "react";
 
 const WalletConnect = () => {
+  // const starknet = getStarknet()
 
   // const account = getStarknet().account.address;
   // const hasStarknet = getStarknet().isConnected;
-  const [account, setAccount] = useState(getStarknet().account.address)
-  useEffect(() => {
-    setAccount(getStarknet().account.address)
-  }, [getStarknet().account.address])
-
-  async function enableArgentX() {
-    // Check if wallet extension is installed and initialized.
-    const starknet = getStarknet()
-    // May throw when no extension is detected, otherwise shows a modal prompting the user to download Argent X.
-    const [userWalletContractAddress] = await starknet.enable({ showModal: true })
-    // checks that enable succeeded
-    if (starknet.isConnected === false) {
+  const [argentAccount, setArgentAccount] = useState("")
+  const enable = async () => {
+    const [userWalletContractAddress] = await getStarknet().enable()
+    if (getStarknet().isConnected === false) {
       throw Error("starknet wallet not connected")
+    }
+    else {
+      console.log('connected with ', getStarknet().account.address)
+      setArgentAccount(getStarknet().account.address)
     }
   }
 
-  // enableArgentX();
+  // useEffect(() => {
+  //   setArgentAccount(getStarknet().account.address)
+  // }, [getStarknet().account.address])
 
-  return !getStarknet().account ? (
-    !getStarknet().isConnected ? (
+  async function enableArgentX() {
+    // Check if wallet extension is installed and initialized.
+    console.log('trying t o connect')
+    // May throw when no extension is detected, otherwise shows a modal prompting the user to download Argent X.
+    const [userWalletContractAddress] = await getStarknet().enable({ showModal: true })
+    // checks that enable succeeded
+    if (getStarknet().isConnected === false) {
+      throw Error("starknet wallet not connected")
+    }
+    else {
+      console.log('show modal connected with ', getStarknet().account.address)
+      setArgentAccount(getStarknet().account.address)
+
+    }
+  }
+
+  enable()
+  if (getStarknet().isConnected === false) {
+    console.log('yep its not enabled')
+  }
+  else {
+    console.log('yep its enabled now')
+  }
+  return (getStarknet().isConnected === false) ? (
+    !!argentAccount ? (
       <Button
         ml="4"
         textDecoration="none !important"
@@ -58,9 +80,9 @@ const WalletConnect = () => {
       // TODO: actually disconnect when supported in starknet-react
       onClick={() => { window.location.reload(); }}
     >
-      {getStarknet().account.address
-        ? `${getStarknet().account.address.substring(0, 4)}...${getStarknet().account.address.substring(
-          getStarknet().account.address.length - 4
+      {argentAccount
+        ? `${argentAccount.substring(0, 4)}...${argentAccount.substring(
+          argentAccount.length - 4
         )}`
         : "No Account"}
     </Button>
