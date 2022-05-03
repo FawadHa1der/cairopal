@@ -19,10 +19,6 @@
     jsonpointer "^5.0.0"
     leven "^3.1.0"
 
-"@argent/get-starknet@git+https://github.com/fawadha1der/argent-x.git#main":
-  version "0.1.0"
-  resolved "git+https://github.com/fawadha1der/argent-x.git#fe5ad633ccfc5734e657ddde8af22943d34793d3"
-
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -2335,13 +2331,6 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@starknet-react/core@^0.4.4":
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/@starknet-react/core/-/core-0.4.6.tgz#fca824d03a767001d60b1e3fc77e64144d5b0d2b"
-  integrity sha512-d0djl3nc7Qt7pLd+giP8iSQoPZp61FooPYfCQ5o8pcCtJy0N/fDh6TEHGiZnLScZFOKRwqrwotNGuLevasIi/Q==
-  dependencies:
-    immutable "^4.0.0"
-
 "@surma/rollup-plugin-off-main-thread@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@surma/rollup-plugin-off-main-thread/-/rollup-plugin-off-main-thread-2.2.3.tgz#ee34985952ca21558ab0d952f00298ad2190c053"
@@ -3069,6 +3058,11 @@ body-parser@1.20.0, body-parser@^1.16.0:
     raw-body "2.5.1"
     type-is "~1.6.18"
     unpipe "1.0.0"
+
+bowser@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/bowser/-/bowser-2.11.0.tgz#5ca3c35757a7aa5771500c70a73a9f91ef420a8f"
+  integrity sha512-AlcaJBi/pqqJBIQ8U9Mcpc9i8Aqxn88Skv5d+xBX006BY5u8N3mGLHa5Lgppa7L/HfwgwLgZ6NYs+Ag6uUmJRA==
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -5191,6 +5185,12 @@ get-port-please@^2.5.0:
   dependencies:
     fs-memo "^1.2.0"
 
+"get-starknet@git+https://github.com/FawadHa1der/get-starknet.git/#master":
+  version "1.0.0"
+  resolved "git+https://github.com/FawadHa1der/get-starknet.git/#25f90971edb38b78348cfbdc5131fc669c83cb98"
+  dependencies:
+    bowser "^2.11.0"
+
 get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
@@ -5639,11 +5639,6 @@ image-meta@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/image-meta/-/image-meta-0.1.1.tgz#a84dc7d5f61c7d60e85ec0c3ac81beee8646039b"
   integrity sha512-+oXiHwOEPr1IE5zY0tcBLED/CYcre15J4nwL50x3o0jxWqEkyjrusiKP3YSU+tr9fvJp33ZcP5Gpj2295g3aEw==
-
-immutable@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0.tgz#b86f78de6adef3608395efb269a91462797e2c23"
-  integrity sha512-zIE9hX70qew5qTUjSS7wi1iwj/l7+m54KWU247nhM3v806UdGj1yDndXj+IOYxxtW9zyLI+xqFNZjTuDaLUqFw==
 
 import-fresh@^3.0.0, import-fresh@^3.1.0, import-fresh@^3.2.1:
   version "3.3.0"

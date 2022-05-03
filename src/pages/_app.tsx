@@ -5,7 +5,7 @@ import { CacheProvider } from "@emotion/react";
 import { ToastContainer } from "material-react-toastify";
 import { DefaultSeo } from "next-seo";
 import { AppProps } from "next/app";
-import { StarknetProvider } from "@starknet-react/core";
+// import { StarknetProvider } from "@starknet-react/core";
 import Head from "next/head";
 import "@fontsource/lexend/latin.css";
 
@@ -30,23 +30,21 @@ const MyApp = ({
 }: MyAppProps) => {
 
   return (
-    <StarknetProvider>
-      <CacheProvider value={emotionCache}>
-        <ChakraProvider theme={customTheme}>
-          <Head>
-            <meta
-              name="viewport"
-              content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
-            />
-          </Head>
-          <DefaultSeo {...defaultSEOConfig} />
-          <ToastContainer />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ChakraProvider>
-      </CacheProvider>
-    </StarknetProvider>
+    <CacheProvider value={emotionCache}>
+      <ChakraProvider theme={customTheme}>
+        <Head>
+          <meta
+            name="viewport"
+            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover"
+          />
+        </Head>
+        <DefaultSeo {...defaultSEOConfig} />
+        <ToastContainer />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </ChakraProvider>
+    </CacheProvider>
   );
 };
 

@@ -17,13 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { Button } from "@chakra-ui/react";
-import { useStarknet } from "@starknet-react/core";
+//import { useStarknet } from "@starknet-react/core";
 import { useRouter } from "next/router";
 import { NFTData } from "./NFTData";
-import { getStarknet } from "@argent/get-starknet"
+import { getStarknet } from "get-starknet";
 
 const Gallery = () => {
-    const { account, hasStarknet, connectBrowserWallet } = useStarknet();
 
     const [photos, setPhotos] = useState<NFTData[]>();
     const toast = useToast();
@@ -49,15 +48,14 @@ const Gallery = () => {
             if (starknet.isConnected === false) {
                 throw Error("starknet wallet not connected")
             }
-
         }
 
-        if (!!account) {
-            getNFTS(account);
+        if (getStarknet().isConnected === true) {
+            getNFTS(getStarknet().account.address);
         } else {
             enableArgentX()
         }
-    }, [account, hasStarknet])
+    }, [getStarknet().isConnected])
 
     // const handleSubmit = async (e) => {
     //     await e.preventDefault();

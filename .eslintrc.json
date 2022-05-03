@@ -25,6 +25,7 @@
     "prefer-destructuring": 0,
     "react/jsx-no-bind": 0,
     "typescript-eslint/naming-convention": 0,
-    "@typescript-eslint/naming-convention": 0
+    "@typescript-eslint/naming-convention": 0,
+    "spaced-comment": 0
   }
 }

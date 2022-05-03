@@ -22,7 +22,7 @@ import { InfoIcon, AtSignIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import fs from 'fs';
 import path from 'path';
-import { getStarknet } from "@argent/get-starknet";
+import { getStarknet } from "get-starknet";
 
 import {
   Contract,

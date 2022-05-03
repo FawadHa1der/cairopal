@@ -4,15 +4,20 @@ import {
   useBreakpointValue,
   useColorMode,
 } from "@chakra-ui/react";
-import { useStarknet } from "@starknet-react/core";
+//import { useStarknet } from "@starknet-react/core";
+import { getStarknet } from "get-starknet";
+import { useEffect, useState } from "react";
 
 const SomeText = () => {
+  const [account, setAccount] = useState(getStarknet().account.address)
   const { colorMode } = useColorMode();
   const textSize = useBreakpointValue({
     base: "xs",
     sm: "md",
   });
-  const { account } = useStarknet();
+  useEffect(() => {
+    setAccount(getStarknet().account.address)
+  }, [getStarknet().account.address])
 
   return (
     <>

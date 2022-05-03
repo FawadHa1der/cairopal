@@ -1,5 +1,5 @@
 import { ChainInfo, isRejected, TransactionStatusStep } from '../';
-import { getStarknet } from "@argent/get-starknet"
+import { getStarknet } from "get-starknet"
 import { starknet } from "starknet"
 import { Contract, defaultProvider, stark, hash, number } from "starknet";
 

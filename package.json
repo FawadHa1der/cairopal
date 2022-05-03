@@ -22,7 +22,7 @@
 		"prepare": "husky install"
 	},
 	"dependencies": {
-		"@argent/get-starknet": "git+https://github.com/fawadha1der/argent-x.git#main",
+		"get-starknet": "git+https://github.com/FawadHa1der/get-starknet.git/#master",
 		"@chakra-ui/icons": "^1.1.7",
 		"@chakra-ui/react": "^1.8.8",
 		"@emotion/cache": "^11.7.1",
@@ -30,7 +30,6 @@
 		"@emotion/server": "^11.4.0",
 		"@emotion/styled": "^11.8.1",
 		"@fontsource/lexend": "^4.5.1",
-		"@starknet-react/core": "^0.4.4",
 		"framer-motion": "^4.1.17",
 		"fs": "^0.0.1-security",
 		"material-react-toastify": "^1.0.1",
