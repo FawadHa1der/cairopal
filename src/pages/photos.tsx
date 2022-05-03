@@ -90,13 +90,6 @@ export default function Photos(props: PhotoProps) {
 
   const toast = useToast();
 
-  // async function fractionalize(user: string) {
-  //   const response = await axios.get("https://api-testnet.playoasisx.com/assets?owner_address=" + user);
-  //   console.log(response);
-  //   setPhotos(response.data);
-  // }
-  // const onRegistered = () => {
-  // }
   async function onRegistered(fractionData: IFractionalize) {
 
     setData(fractionData);
@@ -107,27 +100,9 @@ export default function Photos(props: PhotoProps) {
       contract: json.parse(props.stakingpool)
     });
 
-    // const stakingpoolresponse = await defaultProvider.deployContract({
-    //   contract: JSON.parse(props.stakingpool, (key, value) => {
-    //     if (typeof value === "string" && /^\d+n$/.test(value)) {
-    //       return BigInt(value.substr(0, value.length - 1));
-    //     }
-    //     return value;
-    //   },
-    //   )
-    // });
-
     console.log("Waiting for Tx to be Accepted on Starknet - stakingpool Deployment...");
     await getStarknet().provider.waitForTransaction(stakingpoolresponse.transaction_hash);
 
-    // func constructor{syscall_ptr : felt*, pedersen_ptr : HashBuiltin*, range_check_ptr}(
-    //   name : felt, symbol : felt, decimals : felt, _initial_supply : felt,
-    //   _daily_inflation_rate : felt, _auction_length : felt, _auction_interval : felt,
-    //   _min_bid_increase : felt, _staking_pool_contract : felt, _reward_contract : felt):
-
-
-    // ricks_impl, abi = nre.deploy(
-    //   "ricks", arguments=[f'{ricks}', f'{ricks}', f'{18}', f'{INITIAL_RICKS_SUPPLY}', f'{DAILY_INFLATION_RATE}', f'{AUCTION_LENGTH}', f'{AUCTION_INTERVAL}', f'{MIN_BID_INCREASE}', f'{stakingpool_impl}', f'{TEST_REWARD_TOKEN_ADDRESS}'], alias="ricks")
     console.log("staking pool address", (stakingpoolresponse.address))
     const callDatahash = stark.compileCalldata({
       name: shortString.encodeShortString("ricks"),
@@ -148,16 +123,6 @@ export default function Photos(props: PhotoProps) {
       contract: rickscompiled,
       constructorCalldata: callDatahash
     });
-
-    // const ricksresponse = await defaultProvider.deployContract({
-    //   contract: JSON.parse(props.ricks, (key, value) => {
-    //     if (typeof value === "string" && /^\d+n$/.test(value)) {
-    //       return BigInt(value.substr(0, value.length - 1));
-    //     }
-    //     return value;
-    //   }),
-    //   constructorCalldata: callDatahash
-    // });
 
     console.log("Waiting for Tx to be Accepted on Starknet - ricks Deployment...");
     await defaultProvider.waitForTransaction(ricksresponse.transaction_hash);
@@ -180,46 +145,33 @@ export default function Photos(props: PhotoProps) {
     console.log(`Waiting for Tx to be Accepted on Starknet - Approval for ricks for the token...`);
 
     toast.closeAll()
-    toast({ description: 'Giving approval to ricks for the nft' });
-    // AddTransactionResponse
+    toast({ description: 'Giving approval to ricks for the nft', duration: Infinity });
     const toAddress = ricksresponse?.address?.toString() as string
     const tokenId = pic?.token_id as string
-
-    const transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, tokenId: tokenId })
+    let transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, tokenId: tokenId })
+    console.log(`Waiting for erc721 approve Tx ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
-    // const { transaction_hash: approveTxHash } = getStarknet().account.execute(erc721.approve(
-
-    // ));
-
-    // const { transaction_hash: approveTxHash } = await erc721.approve(
-    //   ricksresponse.address, [0, pic?.token_id as string]
-    // );
-
     toast.closeAll()
-    toast({ description: 'Giving approval to ricks for the reward token' });
-    const { transaction_hash: approveerc20TxHash } = await erc20.approve(
-      ricksresponse.address, [0, '100000']
-    );
+    toast({ description: 'Giving approval to ricks for the reward token', duration: Infinity });
+    transaction_response = await sendTransaction(erc20, 'approve', { spender: toAddress, amount: '100000' })
+    console.log(`Waiting for erc20 approve Tx ${transaction_response.transaction_hash} to be Accepted `);
+    await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
     toast.closeAll()
     toast({ description: 'Activating ricks', duration: Infinity });
-
-    const { transaction_hash: activateTxHash } = await ricks.activate(
-      pic?.contract_address as string, pic?.token_id as string
-    );
-
-    console.log(`Waiting for Tx to be Accepted on Starknet - activating...`);
-    await defaultProvider.waitForTransaction(activateTxHash);
+    transaction_response = await sendTransaction(ricks, 'activate', { _token: erc721.address, _token_id: pic?.token_id })
+    console.log(`Waiting for ricks activating Tx ${transaction_response.transaction_hash} to be Accepted `);
+    await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
     toast.closeAll()
     toast({ description: 'Start the auction', duration: Infinity });
-    const { transaction_hash: startTxHash } = await ricks.start_auction(
-      "10"
-    );
-    toast({ description: 'starting auction' });
-    toast.closeAll()
+    transaction_response = await sendTransaction(ricks, 'start_auction', { bid: '100' })
+    console.log(`Waiting for ricks start_auction ${transaction_response.transaction_hash} to be Accepted `);
+    await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
+    toast.closeAll()
+    toast({ description: 'Success in starting the auction', duration: Infinity });
   }
 
   return (
