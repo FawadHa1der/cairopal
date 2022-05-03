@@ -182,7 +182,12 @@ export default function Photos(props: PhotoProps) {
     toast.closeAll()
     toast({ description: 'Giving approval to ricks for the nft' });
     // AddTransactionResponse
-    const transaction_response = await sendTransaction(erc721, erc721.approve, { to: ricksresponse?.address?.toString() as string, tokenId: pic?.token_id as string })
+    const toAddress = ricksresponse?.address?.toString() as string
+    const tokenId = pic?.token_id as string
+
+    const transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, tokenId: tokenId })
+    await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
+
     // const { transaction_hash: approveTxHash } = getStarknet().account.execute(erc721.approve(
 
     // ));
