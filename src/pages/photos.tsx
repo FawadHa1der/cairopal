@@ -14,6 +14,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useToast } from '@chakra-ui/react'
+import { utils } from "ethers"
 
 import Image from "next/image";
 import Head from "next/head";
@@ -35,6 +36,7 @@ import {
   number,
   stark,
   shortString,
+  uint256,
   Abi
 } from "starknet";
 import { sendTransaction } from "utils/blockchain/starknet";
@@ -65,6 +67,14 @@ interface PhotoProps {
   ricks: any;
   erc721: any;
   erc20: any
+}
+
+function getUint256CalldataFromBN(bn: number.BigNumberish) {
+  return { type: "struct" as const, ...uint256.bnToUint256(bn) }
+}
+
+function parseInputAmountToUint256(input: string, decimals: number = 18) {
+  return getUint256CalldataFromBN(utils.parseUnits(input, decimals).toString())
 }
 
 
@@ -144,33 +154,28 @@ export default function Photos(props: PhotoProps) {
     console.log('pic.contract_address ', pic?.contract_address, 'pic.token_id ', pic?.token_id);
     console.log(`Waiting for Tx to be Accepted on Starknet - Approval for ricks for the token...`);
 
-    toast.closeAll()
     toast({ description: 'Giving approval to ricks for the nft', duration: Infinity });
     const toAddress = ricksresponse?.address?.toString() as string
     const tokenId = pic?.token_id as string
-    let transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, tokenId: tokenId })
+    let transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, token_id: parseInputAmountToUint256(tokenId) })
     console.log(`Waiting for erc721 approve Tx ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
-    toast.closeAll()
     toast({ description: 'Giving approval to ricks for the reward token', duration: Infinity });
     transaction_response = await sendTransaction(erc20, 'approve', { spender: toAddress, amount: '100000' })
     console.log(`Waiting for erc20 approve Tx ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
-    toast.closeAll()
     toast({ description: 'Activating ricks', duration: Infinity });
     transaction_response = await sendTransaction(ricks, 'activate', { _token: erc721.address, _token_id: pic?.token_id })
     console.log(`Waiting for ricks activating Tx ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
-    toast.closeAll()
     toast({ description: 'Start the auction', duration: Infinity });
     transaction_response = await sendTransaction(ricks, 'start_auction', { bid: '100' })
     console.log(`Waiting for ricks start_auction ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 
-    toast.closeAll()
     toast({ description: 'Success in starting the auction', duration: Infinity });
   }
 
