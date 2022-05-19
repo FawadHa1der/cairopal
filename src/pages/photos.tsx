@@ -37,31 +37,19 @@ import {
   stark,
   shortString,
   uint256,
-  Abi
+  Abi,
+  CompiledContract
 } from "starknet";
 import { sendTransaction } from "utils/blockchain/starknet";
 
+import ricksompiledcontract from "../compiledcairo/RICKS.json";
+import stakingpoolcompiledcontract from "../compiledcairo/StakingPool.json";
+import erc20compiledcontract from "../compiledcairo/erc20.json";
+import erc721compiledcontract from "../compiledcairo/erc721.json";
+
+
 // import { transformCallsToMulticallArrays } from "starknet/utils/transaction";
 
-export async function getStaticProps() {
-  const compiledDirectory = path.join(process.cwd(), 'src/compiledcairo');
-  const fullStakingPath = path.join(compiledDirectory, "StakingPool.json");
-
-  const fullRicksPath = path.join(compiledDirectory, "ricks.json");
-  const erc721Path = path.join(compiledDirectory, "erc721.json");
-  const erc20Path = path.join(compiledDirectory, "erc20.json");
-
-  //  JSON.parse(JSON.stringify(request.results)); 
-
-  return {
-    props: {
-      stakingpool: fs.readFileSync(fullStakingPath).toString("ascii"),
-      ricks: fs.readFileSync(fullRicksPath).toString("ascii"),
-      erc721: fs.readFileSync(erc721Path).toString("ascii"),
-      erc20: fs.readFileSync(erc20Path).toString("ascii")
-    }
-  };
-}
 interface PhotoProps {
   stakingpool: any;
   ricks: any;
@@ -73,12 +61,12 @@ function getUint256CalldataFromBN(bn: number.BigNumberish) {
   return { type: "struct" as const, ...uint256.bnToUint256(bn) }
 }
 
-function parseInputAmountToUint256(input: string, decimals: number = 18) {
+function parseInputAmountToUint256(input: string, decimals = 18) {
   return getUint256CalldataFromBN(utils.parseUnits(input, decimals).toString())
 }
 
 
-export default function Photos(props: PhotoProps) {
+export default function Photos() {
   const rewardToken = '0x07394cbe418daa16e42b87ba67372d4ab4a5df0b05c6e554d158458ce245bc10';
 
   const router = useRouter();
@@ -88,7 +76,7 @@ export default function Photos(props: PhotoProps) {
   const [stkAddress, setStkAddress] = useState<string>();
   const [ricksAddress, setRicksAddress] = useState<string>();
 
-  console.log("props  ", props);
+  //console.log("props  ", props);
 
   // let pic = null;
   // console.log("pic ", query);
@@ -105,9 +93,9 @@ export default function Photos(props: PhotoProps) {
     setData(fractionData);
     console.log('fractionData  ', fractionData)
     toast({ description: 'This might take 3-10 mins deploying to goerli test net' })
-    const { stakingpool } = props.stakingpool;
     const stakingpoolresponse = await getStarknet().provider.deployContract({
-      contract: json.parse(props.stakingpool)
+      contract: stakingpoolcompiledcontract as CompiledContract
+      //  contract: json.parse(props.stakingpool)
     });
 
     console.log("Waiting for Tx to be Accepted on Starknet - stakingpool Deployment...");
@@ -127,10 +115,10 @@ export default function Photos(props: PhotoProps) {
       _reward_contract: rewardToken
     });
 
-    const rickscompiled = json.parse(props.ricks);
+    //const rickscompiled = json.parse(props.ricks);
 
     const ricksresponse = await defaultProvider.deployContract({
-      contract: rickscompiled,
+      contract: ricksompiledcontract as CompiledContract,
       constructorCalldata: callDatahash
     });
 
@@ -142,14 +130,14 @@ export default function Photos(props: PhotoProps) {
     setRicksAddress(ricksresponse.address?.toString())
     console.log(info)
 
-    const ricks = new Contract(rickscompiled.abi, ricksresponse.address as string);
+    const ricks = new Contract((ricksompiledcontract as CompiledContract).abi, ricksresponse.address as string);
     console.log('pic.contract_address ', pic?.contract_address, 'pic.token_id ', pic?.token_id);
 
-    const erc20compiled = json.parse(props.erc20);
-    const erc721compiled = json.parse(props.erc721);
+    // const erc20compiled = json.parse(props.erc20);
+    // const erc721compiled = json.parse(props.erc721);
 
-    const erc721 = new Contract(erc721compiled.abi, pic?.contract_address as string);
-    const erc20 = new Contract(erc20compiled.abi, rewardToken);
+    const erc721 = new Contract((erc721compiledcontract as CompiledContract).abi, pic?.contract_address as string);
+    const erc20 = new Contract((erc20compiledcontract as CompiledContract).abi, rewardToken);
 
     console.log('pic.contract_address ', pic?.contract_address, 'pic.token_id ', pic?.token_id);
     console.log(`Waiting for Tx to be Accepted on Starknet - Approval for ricks for the token...`);
@@ -157,7 +145,8 @@ export default function Photos(props: PhotoProps) {
     toast({ description: 'Giving approval to ricks for the nft', duration: Infinity });
     const toAddress = ricksresponse?.address?.toString() as string
     const tokenId = pic?.token_id as string
-    let transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, token_id: parseInputAmountToUint256(tokenId) })
+
+    let transaction_response = await sendTransaction(erc721, 'approve', { to: toAddress, tokenId: parseInputAmountToUint256(tokenId) })
     console.log(`Waiting for erc721 approve Tx ${transaction_response.transaction_hash} to be Accepted `);
     await getStarknet().provider.waitForTransaction(transaction_response.transaction_hash);
 

@@ -1,2 +1,7 @@
-[[plugins]]
-package = "@netlify/plugin-nextjs"
+# Include all files in all functions
+[functions]
+  included_files = ["src/**"]
+
+# ... or only JSON files in "function-1"
+[functions."function-1"]
+  included_files = ["src/compiledcontract/**.json"]

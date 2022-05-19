@@ -44,7 +44,7 @@ const Gallery = () => {
         const enable = async () => {
             const [userWalletContractAddress] = await getStarknet().enable()
             if (getStarknet().isConnected === false) {
-                throw Error("starknet wallet not connected")
+                // throw Error("starknet wallet not connected")
             }
             else {
                 console.log('connected with ', getStarknet().account.address)
@@ -61,7 +61,7 @@ const Gallery = () => {
             const [userWalletContractAddress] = await starknet.enable()
             // checks that enable succeeded
             if (starknet.isConnected === false) {
-                throw Error("starknet wallet not connected")
+                // throw Error("starknet wallet not connected")
             }
         }
 

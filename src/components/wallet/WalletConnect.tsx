@@ -11,12 +11,12 @@ const WalletConnect = () => {
   const [argentAccount, setArgentAccount] = useState("")
   const enable = async () => {
     const [userWalletContractAddress] = await getStarknet().enable()
-    if (getStarknet().isConnected === false) {
-      throw Error("starknet wallet not connected")
-    }
-    else {
+    if (getStarknet().isConnected === true) {
       console.log('connected with ', getStarknet().account.address)
       setArgentAccount(getStarknet().account.address)
+    }
+    else {
+      // throw Error("starknet wallet not connected")
     }
   }
 
@@ -31,7 +31,7 @@ const WalletConnect = () => {
     const [userWalletContractAddress] = await getStarknet().enable({ showModal: true })
     // checks that enable succeeded
     if (getStarknet().isConnected === false) {
-      throw Error("starknet wallet not connected")
+      //  throw Error("starknet wallet not connected")
     }
     else {
       console.log('show modal connected with ', getStarknet().account.address)
@@ -40,7 +40,7 @@ const WalletConnect = () => {
     }
   }
 
-  enable()
+  //  enable()
   if (getStarknet().isConnected === false) {
     console.log('yep its not enabled')
   }
