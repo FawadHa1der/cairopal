@@ -5391,10 +5391,9 @@ get-port-please@^2.5.0:
   dependencies:
     fs-memo "^1.2.0"
 
-get-starknet@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/get-starknet/-/get-starknet-1.3.1.tgz#2b4968f024143fc827ded73bc00af68e5c5f27e8"
-  integrity sha512-E0YGmSGFECGlnBd53n+OSRWyDVJo8tl4qrrNipqU85WE9Ljby2ObTPLOTm6nVQpD9uhhqMoEvz0BAuxnHqSQcA==
+"get-starknet@git+https://github.com/FawadHa1der/get-starknet.git/#master":
+  version "1.0.0"
+  resolved "git+https://github.com/FawadHa1der/get-starknet.git/#b353e0bc14a32c13521633ac06df63ae65238970"
   dependencies:
     bowser "^2.11.0"
 
@@ -8608,10 +8607,9 @@ standard-version@^9.3.2:
     stringify-package "^1.0.1"
     yargs "^16.0.0"
 
-starknet@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/starknet/-/starknet-3.9.0.tgz#ee7a3d99effef0998b365d95dd85f9b01cdb463c"
-  integrity sha512-/sn3WHFX7f+A3vVf3I+Kamg2KIW6494vpCcZWA09IQ5RZXrozjaBtYWT41SoKKWZ3b0Xg8WF//SOkRVCTZOZkQ==
+"starknet@git+https://github.com/fawadha1der/starknet.js.git#develop":
+  version "3.10.1"
+  resolved "git+https://github.com/fawadha1der/starknet.js.git#446b8c482d362eb1f503589542fd926145e09596"
   dependencies:
     "@ledgerhq/hw-app-eth" "^6.26.0"
     "@ledgerhq/hw-transport" "^6.24.1"

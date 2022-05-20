@@ -30,7 +30,7 @@ const CTASection = () => {
       <Flex justifyContent="center" alignItems="center" gridGap={2}>
         <Button
           as="a"
-          href="https://github.com/a5f9t4/cairopal/generate"
+          href="https://github.com/fawadha1der/cairopal/generate"
           target="_blank"
           size="sm"
         >
